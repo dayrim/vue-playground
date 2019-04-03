@@ -1,8 +1,8 @@
-import moment from 'moment';
+import moment from "moment";
 
 export default [
     {
-        subject: 'Confirm your subscription',
+        subject: "Confirm your subscription",
         content: `
             <p>Hello Bo,</p>
             <p>Thank you for subscribing to our newsletter!</p>
@@ -13,16 +13,16 @@ export default [
         isImportant: false,
         isDeleted: false,
         isRead: false,
-        type: 'incoming',
+        type: "incoming",
         date: moment(),
         from: {
-            name: 'Coding Explained',
-            email: 'irony@codingexplained.com'
+            name: "Coding Explained",
+            email: "irony@codingexplained.com"
         },
         attachments: []
     },
     {
-        subject: 'CrunchBase Daily',
+        subject: "CrunchBase Daily",
         content: `
             <p>Here's what happened yesterday.</p>
             <ul>
@@ -35,16 +35,16 @@ export default [
         isImportant: false,
         isDeleted: false,
         isRead: false,
-        type: 'incoming',
+        type: "incoming",
         date: moment(),
         from: {
-            name: 'CrunchBase',
-            email: 'daily@crunchbase.com'
+            name: "CrunchBase",
+            email: "daily@crunchbase.com"
         },
         attachments: []
     },
     {
-        subject: 'Design',
+        subject: "Design",
         content: `
             <p>Hey Bo, here's the design that you requested.</p>
             <p>Let me know what you think. Hope you like it!</p>
@@ -53,17 +53,17 @@ export default [
         isImportant: false,
         isDeleted: false,
         isRead: false,
-        type: 'incoming',
+        type: "incoming",
         date: moment(),
         from: {
-            name: 'Sarah',
-            email: 'sarah-designer@gmail.com'
+            name: "Sarah",
+            email: "sarah-designer@gmail.com"
         },
         attachments: [
             {
-                fileName: 'design.psd',
+                fileName: "design.psd",
                 size: 14700000
             }
         ]
     }
-]
+];
