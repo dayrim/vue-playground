@@ -2,31 +2,14 @@
     <div class="container-fluid">
         <div class="row">
           <div class="col">
-        <b-button @click="goBack" >&laquo; Back</b-button>
-        <h1>{{ product.name }}</h1>
-        <hr>
         <img class="thumbnail" :src="product.image">
         <p><strong>ID:</strong> {{ product.id }}</p>
-        <p><strong>Price:</strong> {{ product.price | currency }}</p>
+        <p><strong>Price:</strong> {{ product.price - discount | currency }}<span v-if="discount >0">(save {{discount | currency}})</span></p>
         <p><strong>In stock:</strong> {{ product.inStock }}</p>
         <p>{{ product.description }}</p>
        </div>
        </div>
-       <br><br>
-        <div class="row">
-          <div class=col>
-        <div v-if="relatedProducts != null">
-            <h2>Related Products</h2>
-            <ul>
-                <li v-for="(related,index) in relatedProducts" :key="index">
-                    <router-link :to="{ name: 'ViewProduct', params: { productId: related.id } }">
-                        {{ related.name }}
-                    </router-link>
-                </li>
-            </ul>
-        </div>
-        </div>
-        </div>
+
     </div>
 </template>
 
@@ -42,16 +25,25 @@ export default {
     data() {
         return {
             products: products,
-            product: null
+            product: null,
+            discount: 0
         };
     },
     watch:{
         productId(newValue){
             this.product = this.getProduct(newValue);
+            this.discount = this.getDiscount(this.product.price, this.$route.query.discount);
         }
     },
     created() {
+        this.$watch("$route.query.discount",(newValue,oldValue)=>{
+            this.discount = this.getDiscount(this.product.price, newValue);
+        });
         this.product = this.getProduct(this.productId);
+
+        if(typeof this.$route.query.discount !== "undefined"){
+            this.discount = this.getDiscount(this.product.price, this.$route.query.discount);
+        }
     },
     methods: {
         getProduct(productId) {
@@ -65,27 +57,11 @@ export default {
 
             return match;
         },
-        goBack(){
-            this.$router.go(-1);
-        }
-    },
-    computed: {
-        relatedProducts() {
-            if (this.product === null) {
-                return [];
+        getDiscount(originalPrice, percentage){
+            if (!percentage){
+                return 0;
             }
-          
-            let related = [];
-            let count = 0;
-
-            this.products.forEach((product)=>{
-                if(product.id != this.product.id && count <5){
-                    related.push(product);
-                    count++;
-                }
-            });
-            console.log(related);
-            return related;
+            return((originalPrice*percentage)/100);
         }
     }
 };

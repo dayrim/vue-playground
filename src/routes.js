@@ -1,24 +1,24 @@
-import ProductList from "./components/ProductList.vue";
-import Cart from "./components/Cart.vue";
-import Contact from "./components/Contact.vue";
-import ViewProduct from "./components/ViewProduct.vue";
-import PageNotFound from "./components/PageNotFound.vue";
-import Product from "./components/Product.vue";
-import ProductReviews from "./components/ProductReviews.vue";
 
 export const routes = [
-    { path: "", component: ProductList },
-    { path: "/cart", component: Cart, alias: "/shopping-cart" },
+    { path: "", components: {
+        default:  ()=>import("./components/ProductList.vue"),
+        discount: ()=>import("./components/SpecialOffer.vue")
+    },
+    },
+    { path: "/cart", component: ()=>import("./components/Cart.vue") , alias: "/shopping-cart" },
     {
         path: "/product/:productId",
         props: true,
         name: "Product",
-        component: Product,
+        component: ()=>import("./components/Product.vue"),
         children:[
-            {path: "details", name: "ViewProduct", props: true, component: ViewProduct},
-            {path: "reviews", name: "ProductReviews", props: true, component: ProductReviews}
+            {path: "details", name: "ViewProduct", props: true, component: ()=>import("./components/ViewProduct.vue")},
+            {path: "reviews", name: "ProductReviews", props: true, component: ()=>import("./components/ProductReviews.vue")}
         ]
     },
-    { path: "/contact", component: Contact },
-    { path: "/*", component: PageNotFound }
+
+    { path: "/contact", component: ()=>import("./components/Contact.vue") },
+    { path: "/animation", component: ()=>import("./components/Animation.vue") },
+    { path: "/blog", component: ()=>import("./components/Blog.vue") },
+    { path: "/*", component: ()=>import("./components/PageNotFound.vue") }
 ];

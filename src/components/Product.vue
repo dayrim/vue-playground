@@ -3,21 +3,33 @@
         <div class="row">
           <div class="col">
 
+        <b-button @click="goBack" >&laquo; Back</b-button>
+        <h1>{{ product.name }}</h1>
 
-         <b-nav vertical class="w-25">
-            <b-nav-item class="presentation" :to="{name: 'ViewProduct', params:{productId: product.id}}"><a>Details</a></b-nav-item>
-             <b-nav-item class="presentation" :to="{name: 'ProductReviews', params:{productId: product.id}}"><a>Reviews</a></b-nav-item>
+         <b-nav tabs fill>
+            <b-nav-item   active-class="active" class="presentation"  :to="{name: 'ViewProduct', params:{productId: product.id}}"><a>Details</a></b-nav-item>
+            <b-nav-item   active-class="active"  class="presentation" :to="{name: 'ProductReviews', params:{productId: product.id}}"><a>Reviews</a></b-nav-item>
             
         </b-nav>
+        <br><br>
+        <router-view></router-view>
 
-        <routed-view></routed-view>
-        <hr>
+   
        </div>
        </div>
        <br><br>
-        <div class="row">
+        <div class="row" id="related">
           <div class=col>
-
+        <div v-if="relatedProducts != null" >
+            <h2>Related Products</h2>
+            <ul>
+                <li v-for="(related,index) in relatedProducts" :key="index">
+                    <router-link :to="{ name: 'ViewProduct', params: { productId: related.id } }">
+                        {{ related.name }}
+                    </router-link>
+                </li>
+            </ul>
+        </div>
         </div>
         </div>
     </div>
@@ -59,7 +71,29 @@ export default {
 
             return match;
         },
+        goBack(){
+            this.$router.push("/");
+        }
   
+    },
+    computed: {
+        relatedProducts() {
+            if (this.product === null) {
+                return [];
+            }
+          
+            let related = [];
+            let count = 0;
+
+            this.products.forEach((product)=>{
+                if(product.id != this.product.id && count <5){
+                    related.push(product);
+                    count++;
+                }
+            });
+            console.log(related);
+            return related;
+        }
     }
 };
 </script>

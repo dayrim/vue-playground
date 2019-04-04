@@ -33,8 +33,6 @@
 
 <script>
 import { products } from "../data/products";
-import { eventBus } from "../main";
-
 export default {
     data() {
         return {
@@ -43,18 +41,36 @@ export default {
     },
     methods: {
         addProductToCart(product, quantity) {
-            eventBus.$emit("addItemToCart", {
-                product: product,
-                quantity: quantity
-            });
+            let cartItem = this.getCartItem(product);
+
+            // TODO: Verify that there is "quantity" of the product in stock before adding it.
+
+            if (cartItem != null) {
+                cartItem.quantity += quantity;
+            } else {
+                this.cart.items.push({
+                    product: product,
+                    quantity: quantity
+                });
+            }
+
+            product.inStock -= quantity;
         },
         clickedImage(product){
             this.$router.push({
                 name: "ViewProduct",
                 params: {
                     productId: product.id
+                },
+                query:{
+                    discount: 10
                 }
             });
+        },
+        computed:{
+            cart(){
+                return this.$store.state.cart;
+            }
         }
     }
 };

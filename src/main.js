@@ -6,7 +6,7 @@ import Article from "./components/Article.vue";
 import Contact from "./components/Contact.vue";
 import VueRouter from "vue-router";
 import { routes } from "./routes";
-
+import Vuex from "vuex";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
@@ -20,6 +20,16 @@ Vue.component("appArticle", Article);
 Vue.component("appContact", Contact);
 Vue.use(BootstrapVue);
 Vue.use(VueRouter);
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
+    state:{
+        cart:{
+            items:[]
+        },
+        cartTotal: 0
+    }
+});
 
 Vue.filter("currency", function(value) {
     let formatter = new Intl.NumberFormat("en-US", {
@@ -38,5 +48,6 @@ const router = new VueRouter({
 
 new Vue({
     render: h => h(App),
-    router: router
+    router: router,
+    store: store
 }).$mount("#app");
