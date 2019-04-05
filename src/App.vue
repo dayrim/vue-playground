@@ -47,8 +47,6 @@
 
 <script>
 
-import { eventBus } from "./main";
-import CartMixin from "./mixins/cart";
 
 export default {
     data() {
@@ -58,14 +56,6 @@ export default {
             isPageReady: false,
 
         };
-    },
-    methods: {
-
-    },
-    created() {
-        eventBus.$on("addItemToCart", data => {
-            this.addProductToCart(data.product, data.quantity);
-        });
     },
     mounted: function() {
         this.$nextTick(function() {

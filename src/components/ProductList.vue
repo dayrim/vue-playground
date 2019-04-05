@@ -53,8 +53,14 @@ export default {
                     quantity: quantity
                 });
             }
-
             product.inStock -= quantity;
+        },
+        getCartItem(product){
+            for(let i=0;i<this.cart.items.length;i++){
+                if(this.cart.items[i].product.id ===product.id){
+                    return this.cart.items[i];
+                }
+            }
         },
         clickedImage(product){
             this.$router.push({
@@ -67,10 +73,11 @@ export default {
                 }
             });
         },
-        computed:{
-            cart(){
-                return this.$store.state.cart;
-            }
+    },
+    
+    computed:{
+        cart(){
+            return this.$store.state.cart;
         }
     }
 };

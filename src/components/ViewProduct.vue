@@ -2,11 +2,18 @@
     <div class="container-fluid">
         <div class="row">
           <div class="col">
+        
         <img class="thumbnail" :src="product.image">
         <p><strong>ID:</strong> {{ product.id }}</p>
         <p><strong>Price:</strong> {{ product.price - discount | currency }}<span v-if="discount >0">(save {{discount | currency}})</span></p>
         <p><strong>In stock:</strong> {{ product.inStock }}</p>
         <p>{{ product.description }}</p>
+
+        <button
+        class="btn btn-success add-to-cart"
+        @click="addProductToCart(product, 1)"
+        :disabled="product.inStock <= 0"
+            >Add to cart</button>
        </div>
        </div>
 
@@ -36,7 +43,7 @@ export default {
         }
     },
     created() {
-        this.$watch("$route.query.discount",(newValue,oldValue)=>{
+        this.$watch("$route.query.discount",(newValue)=>{
             this.discount = this.getDiscount(this.product.price, newValue);
         });
         this.product = this.getProduct(this.productId);
@@ -56,12 +63,40 @@ export default {
             });
 
             return match;
+        },        
+        getCartItem(product){
+            for(let i=0;i<this.cart.items.length;i++){
+                if(this.cart.items[i].product.id ===product.id){
+                    return this.cart.items[i];
+                }
+            }
+        },
+        addProductToCart(product, quantity) {
+            let cartItem = this.getCartItem(product);
+
+            // TODO: Verify that there is "quantity" of the product in stock before adding it.
+
+            if (cartItem != null) {
+                cartItem.quantity += quantity;
+            } else {
+                this.cart.items.push({
+                    product: product,
+                    quantity: quantity
+                });
+            }
+            product.inStock -= quantity;
         },
         getDiscount(originalPrice, percentage){
             if (!percentage){
                 return 0;
             }
             return((originalPrice*percentage)/100);
+        }
+    },
+    
+    computed:{
+        cart(){
+            return this.$store.state.cart;
         }
     }
 };
