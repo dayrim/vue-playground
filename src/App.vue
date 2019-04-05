@@ -29,16 +29,10 @@
       <b-col>
         <br><br>
         <transition name="route"  mode="out-in">
-        <router-view :cart="cart"></router-view>
+        <router-view ></router-view>
         </transition>
       </b-col>
-    </b-row>
-
-     
- 
-
-
-   
+    </b-row>   
     </b-container>
 
   </div>
@@ -52,7 +46,6 @@ export default {
     data() {
         return {
 
-      
             isPageReady: false,
 
         };
@@ -69,7 +62,7 @@ export default {
             return this.$store.state.cart;
         },
         cartTotal(){
-            return this.$store.state.cartTotal;
+            return this.$store.getters.cartTotal;
         }
     }
 };

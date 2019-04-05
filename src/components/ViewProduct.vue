@@ -11,7 +11,7 @@
 
         <button
         class="btn btn-success add-to-cart"
-        @click="addProductToCart(product, 1)"
+        @click="addProductToCart()"
         :disabled="product.inStock <= 0"
             >Add to cart</button>
        </div>
@@ -22,7 +22,7 @@
 
 <script>
 import { products } from "../data/products";
-
+import {ADD_PRODUCT_TO_CART} from "../mutation-types";
 export default {
     props: {
         productId:{
@@ -63,28 +63,12 @@ export default {
             });
 
             return match;
-        },        
-        getCartItem(product){
-            for(let i=0;i<this.cart.items.length;i++){
-                if(this.cart.items[i].product.id ===product.id){
-                    return this.cart.items[i];
-                }
-            }
-        },
-        addProductToCart(product, quantity) {
-            let cartItem = this.getCartItem(product);
-
-            // TODO: Verify that there is "quantity" of the product in stock before adding it.
-
-            if (cartItem != null) {
-                cartItem.quantity += quantity;
-            } else {
-                this.cart.items.push({
-                    product: product,
-                    quantity: quantity
-                });
-            }
-            product.inStock -= quantity;
+        },     
+        [ADD_PRODUCT_TO_CART]() {
+            this.$store.dispatch(ADD_PRODUCT_TO_CART,{
+                product: this.product,
+                quantity: 1
+            });
         },
         getDiscount(originalPrice, percentage){
             if (!percentage){

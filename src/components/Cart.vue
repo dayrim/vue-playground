@@ -39,7 +39,7 @@
             <strong>Taxes</strong>
           </td>
 
-          <td>{{ taxAmount | currency }}</td>
+          <td>{{ taxAmount(10) | currency }}</td>
         </tr>
 
         <tr>
@@ -47,7 +47,7 @@
             <strong>Grand total</strong>
           </td>
 
-          <td>{{ cartTotal + taxAmount | currency }}</td>
+          <td>{{ cartTotal + taxAmount(10)  | currency }}</td>
         </tr>
 
         <tr>
@@ -64,10 +64,24 @@
 </template>
 
 <script>
-import CartMixin from "../mixins/cart";
+import {mapGetters} from "vuex";
+import {mapMutations} from "vuex";
+import {CHECKOUT} from "../mutation-types";
 
 export default {
-    props: ["cart"],
-    mixins: [CartMixin]
+    computed:{
+        ...mapGetters([
+            "cartTotal",
+            "taxAmount"
+        ]),
+        cart(){
+            return this.$store.state.cart;
+        }
+    },
+    methods:{
+        ...mapMutations([
+            CHECKOUT
+        ])
+    }
 };
 </script>

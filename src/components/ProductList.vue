@@ -33,6 +33,8 @@
 
 <script>
 import { products } from "../data/products";
+import {ADD_PRODUCT_TO_CART} from "../mutation-types";
+
 export default {
     data() {
         return {
@@ -40,28 +42,7 @@ export default {
         };
     },
     methods: {
-        addProductToCart(product, quantity) {
-            let cartItem = this.getCartItem(product);
-
-            // TODO: Verify that there is "quantity" of the product in stock before adding it.
-
-            if (cartItem != null) {
-                cartItem.quantity += quantity;
-            } else {
-                this.cart.items.push({
-                    product: product,
-                    quantity: quantity
-                });
-            }
-            product.inStock -= quantity;
-        },
-        getCartItem(product){
-            for(let i=0;i<this.cart.items.length;i++){
-                if(this.cart.items[i].product.id ===product.id){
-                    return this.cart.items[i];
-                }
-            }
-        },
+        
         clickedImage(product){
             this.$router.push({
                 name: "ViewProduct",
@@ -73,6 +54,12 @@ export default {
                 }
             });
         },
+        [ADD_PRODUCT_TO_CART](product, quantity){
+            this.$store.dispatch(ADD_PRODUCT_TO_CART,{
+                product: product,
+                quantity: quantity
+            });
+        }
     },
     
     computed:{

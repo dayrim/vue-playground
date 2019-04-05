@@ -91,7 +91,6 @@ export default {
                     count++;
                 }
             });
-            console.log(related);
             return related;
         }
     }
